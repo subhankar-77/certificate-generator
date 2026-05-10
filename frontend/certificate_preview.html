@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate Preview — DEV ONLY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet" />
+
+  <!--
+    ============================================================
+    DEV PREVIEW FILE — FOR EDITING THE CERTIFICATE ONLY
+    ============================================================
+    - Open THIS file in VS Code Live Server while designing.
+    - It always shows the certificate with dummy data.
+    - No backend, no roll number, no login — just the cert.
+    - Any change you make to style.css reflects here instantly.
+    - When done, your real site (index.html) will look identical.
+    - DO NOT share or deploy this file — it is for editing only.
+    ============================================================
+  -->
+
+  <!-- Same stylesheet as the real site — edits apply to both -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ── Extra styles just for this preview page ── */
+    body {
+      background: #89acd0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+      min-height: 100vh;
+    }
+
+    .dev-banner {
+      background: #f0a500;
+      color: #1a1a1a;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-align: center;
+      padding: 0.5rem 1.5rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      max-width: 780px;
+    }
+
+    .cert-preview-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(253,248,239,0.35);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dev-banner">
+    🛠️ DEV PREVIEW — Edit style.css and this updates live. Do not deploy this file.
+  </div>
+
+  <div class="cert-preview-label">✦ &nbsp; Certificate of Felicitation &nbsp; ✦</div>
+
+  <!-- Exact same #certificate markup as in index.html -->
+  <!-- Any CSS change you make will reflect here instantly  -->
+  <div id="certificate">
+
+    <div class="cert-border-outer"></div>
+    <div class="cert-border-inner"></div>
+
+    <div class="cert-corner tl"><svg viewBox="0 0 36 36"><path d="M4,4 L4,20 M4,4 L20,4" stroke="#8a6b1e" stroke-width="2" fill="none"/><circle cx="4" cy="4" r="3" fill="#c9a84c"/></svg></div>
+    <div class="cert-corner tr"><svg viewBox="0 0 36 36"><path d="M4,4 L4,20 M4,4 L20,4" stroke="#8a6b1e" stroke-width="2" fill="none"/><circle cx="4" cy="4" r="3" fill="#c9a84c"/></svg></div>
+    <div class="cert-corner bl"><svg viewBox="0 0 36 36"><path d="M4,4 L4,20 M4,4 L20,4" stroke="#8a6b1e" stroke-width="2" fill="none"/><circle cx="4" cy="4" r="3" fill="#c9a84c"/></svg></div>
+    <div class="cert-corner br"><svg viewBox="0 0 36 36"><path d="M4,4 L4,20 M4,4 L20,4" stroke="#8a6b1e" stroke-width="2" fill="none"/><circle cx="4" cy="4" r="3" fill="#c9a84c"/></svg></div>
+
+    <div class="cert-content">
+
+      <div class="cert-header">
+        <!-- EDIT: Small seal on certificate -->
+        <!--<div class="cert-seal-small">CIEM</div>-->
+        <img src="ciem_logo.jpeg" class="college-logo-img" alt="CIEM Logo">
+        <!-- EDIT: College name on certificate -->
+        <div class="cert-college-name">Calcutta Institute of Engineering &amp; Management</div>
+        <!-- EDIT: Department name on certificate -->
+        <div class="cert-dept-name">Department of Computer Science &amp; Engineering</div>
+      </div>
+
+      <div class="cert-title-area">
+        <div class="cert-presents">This is to certify and felicitate</div>
+        <!-- EDIT: Main heading -->
+        <div class="cert-title">Certificate of Felicitation</div>
+        <!-- EDIT: Subtitle -->
+        <div class="cert-subtitle">In recognition of the successful completion of B.Tech (CSE)</div>
+      </div>
+
+      <div class="cert-body">
+        <div class="cert-to-label">Conferred upon</div>
+        <!-- DUMMY NAME — replace with any long name to test layout -->
+        <div class="cert-student-name" id="certName">Souvik Chatterjee</div>
+        <!-- DUMMY BODY TEXT — edit getCertText() in script.js for the real version -->
+        <div class="cert-description" id="certDesc">
+          This is to certify that <strong>Souvik Chatterjee</strong> has successfully completed
+          the four-year Bachelor of Technology degree in
+          <strong>Computer Science &amp; Engineering</strong>
+          from <strong>Calcutta Institute of Engineering &amp; Management</strong>,
+          affiliated to Maulana Abul Kalam Azad University of Technology (MAKAUT), West Bengal,
+          in the graduating year <strong>2026</strong>, and is hereby felicitated on
+          <strong>5th June, 2026</strong> in recognition of this distinguished academic achievement.
+        </div>
+      </div>
+
+      <div class="cert-footer">
+        <div class="cert-sign-block">
+          <div class="cert-sign-line"></div>
+          <!-- EDIT: Principal name — change here AND in script.js → AUTHORITIES -->
+          <div class="cert-sign-name" id="certPrincipal">Dr. Rakhi Bhattacharya </div>
+          <div class="cert-sign-role">Principal, CIEM</div>
+        </div>
+
+        <div class="cert-emblem">
+          <div class="cert-emblem-inner">
+            <div class="cert-emblem-text">CIEM<br><span>★</span><br>2026</div>
+          </div>
+        </div>
+
+        <div class="cert-sign-block">
+          <div class="cert-sign-line"></div>
+          <!-- EDIT: HOD name — change here AND in script.js → AUTHORITIES -->
+          <div class="cert-sign-name" id="certHod">Prof. Rupayan Sanyal</div>
+          <div class="cert-sign-role">Head of Department, CSE</div>
+        </div>
+      </div>
+
+    </div><!-- /cert-content -->
+
+    <div class="cert-id-stamp">Cert ID: CIEM-CSE-2026-PREVIEW</div>
+
+  </div><!-- /#certificate -->
+
+</body>
+</html>

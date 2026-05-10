@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Felicitation Ceremony 2026 — CIEM CSE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════ HEADER ══════════════ -->
+  <header>
+    <!--<div class="college-logo">CIEM</div>
+    
+      EDIT: Replace above with your real logo: -->
+      <img src="ciem_logo.jpeg" class="college-logo-img" alt="CIEM Logo">
+    
+    <div class="college-name">Calcutta Institute of Engineering &amp; Management</div>
+    <div class="dept-name">Department of Computer Science &amp; Engineering</div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-diamond"></div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="ceremony-title">Felicitation <span class="ceremony-year">Ceremony</span></div>
+    <div class="ceremony-subtitle">Graduating Batch 2022–2026 &nbsp;·&nbsp; B.Tech Computer Science &amp; Engineering</div>
+  </header>
+
+  <!-- ══════════════ MAIN ══════════════ -->
+  <main>
+
+    <!--
+      ROLL NUMBER FORM
+      Shown immediately on page load — no access code gate.
+      Only a roll number is needed; name is fetched from the database.
+    -->
+    <section class="card" id="formSection">
+      <div class="card-icon">🎓</div>
+      <h2>Get Your Certificate</h2>
+      <p class="card-sub">
+        Enter your roll number to generate and download your official
+        Certificate of Felicitation as a PDF.
+      </p>
+
+      <div class="roll-input-row">
+        <div class="field-group">
+          <label for="rollInput">Enter your Roll Number</label>
+          <input
+            type="text"
+            id="rollInput"
+            placeholder="e.g. 16500122001"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+        <!--
+          id="generateBtn" is referenced in script.js for the
+          button-disable feature (change 6 in your requirements).
+          Do NOT rename this id.
+        -->
+        <button class="btn-generate" id="generateBtn" onclick="generateCertificate()">
+          ✦ Generate Certificate
+        </button>
+      </div>
+
+      <div class="error-msg" id="formError"></div>
+      <div class="loader"    id="formLoader"></div>
+    </section>
+
+    <!-- CERTIFICATE — hidden until roll number is verified -->
+    <section class="cert-wrapper hidden" id="certWrapper">
+      <div class="cert-preview-label">✦ &nbsp; Certificate of Felicitation &nbsp; ✦</div>
+
+      <!--
+        id="certificate" is captured by html2canvas and converted to PDF.
+        Do NOT rename this id.
+        To edit the look: change styles in style.css under /* CERTIFICATE STYLES */
+        To edit text content: change getCertText() and AUTHORITIES in script.js
+      -->
+      <div id="certificate">
+
+        <div class="cert-border-outer"></div>
+        <div class="cert-border-inner"></div>
+
+        <!-- Corner ornaments -->
+        <div class="cert-corner tl"><svg viewBox="0 0 36 36"><path d="M4,4 L4,20 M4,4 L20,4" stroke="#8a6b1e" stroke-width="2" fill="none"/><circle cx="4" cy="4" r="3" fill="#c9a84c"/></svg></div>
+        <div class="cert-corner tr"><svg viewBox="0 0 36 36"><path d="M4,4 L4,20 M4,4 L20,4" stroke="#8a6b1e" stroke-width="2" fill="none"/><circle cx="4" cy="4" r="3" fill="#c9a84c"/></svg></div>
+        <div class="cert-corner bl"><svg viewBox="0 0 36 36"><path d="M4,4 L4,20 M4,4 L20,4" stroke="#8a6b1e" stroke-width="2" fill="none"/><circle cx="4" cy="4" r="3" fill="#c9a84c"/></svg></div>
+        <div class="cert-corner br"><svg viewBox="0 0 36 36"><path d="M4,4 L4,20 M4,4 L20,4" stroke="#8a6b1e" stroke-width="2" fill="none"/><circle cx="4" cy="4" r="3" fill="#c9a84c"/></svg></div>
+
+        <div class="cert-content">
+
+          <div class="cert-header">
+            <!-- <div class="cert-seal-small">CIEM</div> -->
+            <img src="ciem_logo.jpeg" width="25" height="25" class="college-logo-img" alt="CIEM Logo">
+            <div class="cert-college-name" style="margin-top: -10px;">Calcutta Institute of Engineering &amp; Management</div>
+            <div class="cert-dept-name">Department of Computer Science &amp; Engineering</div>
+          </div>
+
+          <div class="cert-title-area">
+            <div class="cert-presents">This is to certify and felicitate</div>
+            <div class="cert-title">Certificate of Felicitation</div>
+            <div class="cert-subtitle">In recognition of the successful completion of B.Tech (CSE)</div>
+          </div>
+
+          <div class="cert-body">
+            <div class="cert-to-label">Conferred upon</div>
+            <div class="cert-student-name" id="certName"></div>
+            <div class="cert-description"  id="certDesc"></div>
+          </div>
+
+          <div class="cert-footer">
+            <div class="cert-sign-block">
+              <div class="cert-sign-line"></div>
+              <div class="cert-sign-name" id="certPrincipal"></div>
+              <div class="cert-sign-role">Principal, CIEM</div>
+            </div>
+
+            <div class="cert-emblem">
+              <div class="cert-emblem-inner">
+                <div class="cert-emblem-text">CIEM<br><span>★</span><br>2026</div>
+              </div>
+            </div>
+
+            <div class="cert-sign-block">
+              <div class="cert-sign-line"></div>
+              <div class="cert-sign-name" id="certHod"></div>
+              <div class="cert-sign-role">Head of Department, CSE</div>
+            </div>
+          </div>
+
+        </div><!-- /cert-content -->
+
+        <!-- Unique cert ID — printed bottom-right of certificate -->
+        <div class="cert-id-stamp" id="certIdStamp"></div>
+
+      </div><!-- /#certificate -->
+
+      <div class="cert-actions">
+        <!--
+          id="downloadBtn" is referenced in script.js for the
+          button-disable feature while PDF is generating.
+          Do NOT rename this id.
+        -->
+        <button class="btn-download" id="downloadBtn" onclick="downloadCertificate()">
+          ⬇&nbsp; Download as PDF
+        </button>
+        <button class="btn-reset" onclick="resetForm()">
+          ↩&nbsp; Generate Another
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <p> 2026 Calcutta Institute of Engineering &amp; Management &nbsp;·&nbsp; <br> Dept. of B.Tech - CSE</p>
+    <p class="footer-sub">Official Digital Certificate Portal &nbsp;&nbsp;<br>© Subhankar Adhikary</p>
+  </footer>
+
+</div>
+
+<!-- html2canvas: captures the #certificate div as a canvas image -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- jsPDF: converts that canvas image into a proper PDF file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

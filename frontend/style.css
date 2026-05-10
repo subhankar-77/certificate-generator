@@ -1,0 +1,703 @@
+/* ================================================================
+   style.css — CIEM Felicitation Ceremony 2026
+   ================================================================
+   HOW TO EDIT:
+   - Colors      → Edit the :root variables at the top
+   - Certificate → Edit everything under "CERTIFICATE STYLES"
+   - Fonts       → Change the Google Fonts link in index.html
+   ================================================================ */
+
+/* ── VARIABLES ── */
+:root {
+  --gold:        #c9a84c;
+  --gold-light:  #e8d08a;
+  --gold-dark:   #8a6b1e;
+  --deep:        #0d1b2a;
+  --deep2:       #162032;
+  --deep3:       #1e2d40;
+  --cream:       #fdf8ef;
+  --cream2:      #f5edd8;
+  --text-dark:   #1a1a1a;
+  --text-muted:  #5a5a5a;
+  --border-gold: rgba(201, 168, 76, 0.3);
+  --error:       #f87c7c;
+  --success:     #7fcea0;
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* ── BASE ── */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--deep);
+  color: var(--cream);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(201,168,76,0.07) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 80%, rgba(201,168,76,0.05) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(22,32,50,0.9) 0%, var(--deep) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; }
+
+/* ── HEADER ── */
+header {
+  text-align: center;
+  padding: 4rem 2rem 2.5rem;
+  border-bottom: 1px solid var(--border-gold);
+}
+
+.college-logo {
+  width: 89px;
+  height: 89px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  margin: 0 auto 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201,168,76,0.08);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  /* EDIT: Replace this with an <img> tag in index.html for real logo */
+}
+
+.college-logo-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: contain;
+  border: 2px solid var(--gold);
+  margin: 0 auto 1.2rem;
+  display: block;
+}
+
+.college-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  margin-bottom: 0.3rem;
+}
+
+.dept-name {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: rgba(253,248,239,0.45);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 360px;
+  margin: 1.8rem auto;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-gold);
+}
+
+.divider-diamond {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+.ceremony-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.1;
+}
+
+.ceremony-year {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.ceremony-subtitle {
+  margin-top: 0.7rem;
+  font-size: 0.82rem;
+  color: rgba(253,248,239,0.4);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ── MAIN ── */
+main {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ── CARDS ── */
+.card {
+  background: rgba(201,168,76,0.04);
+  border: 1px solid var(--border-gold);
+  border-radius: 18px;
+  padding: 2.8rem 2.5rem;
+  text-align: center;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.card.hidden {
+  display: none;
+}
+
+.card-icon {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  margin-bottom: 0.4rem;
+}
+
+.card-sub {
+  font-size: 0.88rem;
+  color: rgba(253,248,239,0.45);
+  margin-bottom: 1.8rem;
+  line-height: 1.7;
+}
+
+/* ── INPUTS ── */
+.input-row {
+  display: flex;
+  gap: 0.8rem;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.input-row input,
+.field-group input {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,168,76,0.22);
+  border-radius: 10px;
+  padding: 0.8rem 1.1rem;
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.input-row input {
+  text-align: center;
+  letter-spacing: 0.15em;
+}
+
+.input-row input:focus,
+.field-group input:focus {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.06);
+}
+
+.input-row input::placeholder,
+.field-group input::placeholder {
+  color: rgba(253,248,239,0.18);
+  letter-spacing: 0.02em;
+}
+
+/* ── FORM GRID ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  text-align: left;
+  margin-bottom: 1.2rem;
+}
+
+@media (max-width: 560px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field-group label {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(253,248,239,0.4);
+  font-weight: 500;
+}
+
+/* ── BUTTONS ── */
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--deep);
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 1.6rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.btn-primary:hover { opacity: 0.88; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-generate {
+  width: 100%;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--deep);
+  border: none;
+  border-radius: 10px;
+  padding: 1rem 2rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  position: relative;
+  top: 18px
+}
+
+.btn-generate:hover { opacity: 0.88; }
+.btn-generate:active { transform: scale(0.99); }
+.btn-generate:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── MESSAGES ── */
+.error-msg {
+  color: var(--error);
+  font-size: 0.84rem;
+  text-align: center;
+  margin-top: 0.8rem;
+  min-height: 1.2em;
+}
+
+/* ── LOADER SPINNER ── */
+.loader {
+  display: none;
+  width: 22px;
+  height: 22px;
+  border: 2.5px solid rgba(201,168,76,0.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0.8rem auto 0;
+}
+
+.loader.show { display: block; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── CERTIFICATE WRAPPER ── */
+.cert-wrapper {
+  text-align: center;
+}
+
+.cert-wrapper.hidden { display: none; }
+
+.cert-preview-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(253,248,239,0.35);
+  margin-bottom: 1.2rem;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CERTIFICATE STYLES
+   EDIT anything in this section to change the certificate look.
+   ══════════════════════════════════════════════════════════════ */
+#certificate {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+  background: var(--cream);
+  color: var(--text-dark);
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.3);
+
+  /* A4 landscape ratio: 297mm / 210mm ≈ 1.414 */
+  aspect-ratio: 1.414;
+}
+
+/* Decorative double border */
+.cert-border-outer {
+  position: absolute;
+  inset: 10px;
+  border: 2px solid var(--gold-dark);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cert-border-inner {
+  position: absolute;
+  inset: 16px;
+  border: 1px solid rgba(201,168,76,0.45);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Corner ornaments */
+.cert-corner {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.cert-corner svg { width: 100%; height: 100%; }
+.cert-corner.tl { top: 5px; left: 5px; }
+.cert-corner.tr { top: 5px; right: 5px; transform: scaleX(-1); }
+.cert-corner.bl { bottom: 5px; left: 5px; transform: scaleY(-1); }
+.cert-corner.br { bottom: 5px; right: 5px; transform: scale(-1); }
+
+/* Main content layout */
+.cert-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4.5% 7%;
+  text-align: center;
+}
+
+/* Top section */
+.cert-header { width: 100%; }
+
+.cert-seal-small {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-dark);
+  margin: 0 auto 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream2);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+}
+
+.cert-college-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.6rem, 1.7vw, 1rem);
+  font-weight: 700;
+  color: var(--deep);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-top: -17px;
+}
+
+.cert-dept-name {
+  font-size: clamp(0.5rem, 1.1vw, 0.68rem);
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  transform: translateY(0.2px);
+}
+
+/* Title area */
+.cert-title-area { width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cert-presents {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(0.75rem, 2.3vw, 0.82rem);
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: -1.4px;
+  transform: translateY(-4.2px);
+}
+
+/* EDIT: Main heading on the certificate */
+.cert-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.3rem, 3.8vw, 2.6rem);
+  font-weight: 700;
+  color: var(--gold-dark);
+  line-height: 1.0;
+  letter-spacing: 0.06em;
+  margin-bottom: -0.5px;
+  
+}
+
+.cert-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(0.5rem, 1.2vw, 0.75rem);
+  color: var(--text-muted);
+  margin-top: 4px;
+  
+}
+
+/* Body */
+.cert-body { width: 100%; }
+
+.cert-to-label {
+  font-size: clamp(0.48rem, 1vw, 0.65rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  /*margin-bottom: 3px;*/
+  transform: translateY(-10.5px);
+}
+
+/* EDIT: Student name styling */
+.cert-student-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.2rem, 3.2vw, 2.2rem);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--deep);
+  line-height: 1.1;
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid var(--gold);
+  display: inline-block;
+  min-width: 200px;
+  transform: translateY(-6.2px);
+}
+
+/* EDIT: Certificate body paragraph */
+.cert-description {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.5rem, 1.1vw, 0.72rem);
+  font-weight: 500;
+  color: rgba(87, 80, 80, 0.9);
+  color: var(--text-dark);
+  line-height: 1.5;
+  margin-top: 7px;
+  max-width: 82%;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translateY(-4.2px);
+}
+
+
+/* Footer — signatures */
+.cert-footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.cert-sign-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 110px;
+  margin-top: 1.2rem;
+}
+
+.cert-sign-line {
+  width: 100%;
+  height: 1px;
+  background: var(--gold-dark);
+  /*margin-bottom: 5px;
+  margin-top: -2px;*/
+  transform: translateY(-14.5px);
+}
+
+/* EDIT: Authority name text on certificate */
+.cert-sign-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.46rem, 1vw, 0.66rem);
+  font-weight: 600;
+  color: var(--deep);
+  text-align: center;
+  line-height: 1.4;
+  /*margin-bottom: 5px; sign name of principal and dean should be closer to signature line*/
+  transform: translateY(-10.5px);
+}
+
+.cert-sign-role {
+  font-size: clamp(0.38rem, 0.85vw, 0.55rem);
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: -4px; /*sign name of principal and dean should be closer to signature line*/
+  transform: translateY(-7.2px);
+}
+
+/* Centre emblem CIEM STAMP */
+.cert-emblem {
+  width: clamp(40px, 8vw, 62px);
+  height: clamp(40px, 8vw, 62px);
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream2);
+}
+
+.cert-emblem-inner {
+  width: 88%;
+  height: 88%;
+  border-radius: 50%;
+  border: 1px solid rgba(138,107,30,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-emblem-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.35rem, 0.8vw, 0.52rem);
+  font-weight: 700;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+}
+
+.cert-emblem-text span {
+  font-size: 1.4em;
+}
+
+/* Cert ID watermark */
+.cert-id-stamp {
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  font-size: clamp(0.3rem, 0.6vw, 0.46rem);
+  color: rgba(90,90,90,0.35);
+  letter-spacing: 0.06em;
+  z-index: 3;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── CERTIFICATE ACTIONS ── */
+.cert-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.6rem;
+  flex-wrap: wrap;
+}
+
+.btn-download {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  border-radius: 9px;
+  padding: 0.7rem 2rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-download:hover {
+  background: rgba(201,168,76,0.1);
+}
+
+.btn-reset {
+  background: transparent;
+  border: 1px solid rgba(253,248,239,0.18);
+  color: rgba(253,248,239,0.5);
+  border-radius: 9px;
+  padding: 0.7rem 2rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-reset:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border-gold);
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+
+footer p {
+  font-size: 0.78rem;
+  color: rgba(253,248,239,0.22);
+}
+
+.footer-sub {
+  margin-top: 0.3rem;
+  font-size: 0.72rem !important;
+  color: rgba(253,248,239,0.14) !important;
+}
+
+/* ── FADE-IN ANIMATION ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card:not(.hidden),
+.cert-wrapper:not(.hidden) {
+  animation: fadeUp 0.4s ease;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  header { padding: 2.5rem 1.2rem 2rem; }
+  .card { padding: 2rem 1.2rem; }
+  .cert-actions { flex-direction: column; align-items: center; }
+  .btn-download, .btn-reset { width: 100%; max-width: 280px; }
+}
