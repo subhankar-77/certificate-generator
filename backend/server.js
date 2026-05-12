@@ -18,7 +18,8 @@
    ================================================================ */
 
 const express   = require("express");
-const Database  = require("better-sqlite3");
+/*const Database  = require("better-sqlite3");*/
+const { Pool } = require("pg");  // adjust path if needed
 const cors      = require("cors");
 const helmet    = require("helmet");
 const rateLimit = require("express-rate-limit");
@@ -38,19 +39,23 @@ const PORT = process.env.PORT || 3000;
    no host/port/password — just the file path.
    The { readonly: false } flag is needed so we can UPDATE download_count.
 */
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, "ciem_students.db");
+const pool = new Pool({
+  host:     process.env.DB_HOST     || "localhost",
+  port:     parseInt(process.env.DB_PORT || "5432"),
+  database: process.env.DB_NAME     || "felicitation",
+  user:     process.env.DB_USER     || "postgres",
+  password: process.env.DB_PASSWORD || "",
+  ssl:      false,
+});
 
-let db;
-try {
-  db = new Database(DB_PATH, { readonly: false, fileMustExist: true });
-  db.pragma("journal_mode = WAL");   // WAL mode: better concurrent read/write
-  db.pragma("foreign_keys = ON");
-  console.log(`✅ Connected to SQLite database: ${DB_PATH}`);
-} catch (err) {
-  console.error("❌ Could not open SQLite database:", err.message);
-  console.error("   Check that DB_PATH in .env points to your actual .db file.");
-  process.exit(1);   // Cannot run without a database
-}
+pool.connect((err, client, release) => {
+  if (err) {
+    console.error("❌ Could not connect to PostgreSQL:", err.message);
+    process.exit(1);
+  }
+  console.log("✅ Connected to PostgreSQL — database: felicitation");
+  release();
+})
 
 
 /* ── MIDDLEWARE ── */
@@ -95,47 +100,32 @@ app.use("/api/", limiter);
    If your SQLiteStudio table uses different column names, update
    the SQL string below (roll_number, full_name, cert_id).
 ================================================================ */
-app.post("/api/verify-student", (req, res) => {
+app.post("/api/verify-student", async (req, res) => {
   const { roll_number } = req.body;
-
-  if (!roll_number || typeof roll_number !== "string") {
-    return res.status(400).json({ success: false, message: "Roll number is required." });
-  }
-
-  const rollUpper = roll_number.trim().toUpperCase();
+  if (!roll_number) return res.status(400).json({ success: false, message: "Roll number is required." });
 
   try {
-    // better-sqlite3 uses synchronous queries — no async/await needed
-    // UPPER() makes the lookup case-insensitive regardless of how
-    // the roll number was stored in SQLiteStudio
-    const student = db.prepare(`
-      SELECT roll_number, full_name, cert_id, download_count
-      FROM   students
-      WHERE  UPPER(roll_number) = ?
-      LIMIT  1
-    `).get(rollUpper);
+    const result = await pool.query(
+      `SELECT roll_number, full_name, cert_id, download_count
+       FROM ciem WHERE UPPER(roll_number) = $1 LIMIT 1`,
+      [roll_number.trim().toUpperCase()]
+    );
+    if (result.rows.length === 0)
+      return res.status(404).json({ success: false, message: "Roll number not found in our records." });
 
-    if (!student) {
-      return res.status(404).json({
-        success : false,
-        message : "Roll number not found in our records. Please check and try again.",
-      });
-    }
-
+    const student = result.rows[0];
     return res.json({
-      success : true,
-      student : {
-        name    : student.full_name,
-        cert_id : student.cert_id || `CIEM-CSE-2026-${student.roll_number}`,
+      success: true,
+      student: {
+        name:    student.full_name,
+        cert_id: student.cert_id || `CIEM-CSE-2026-${student.roll_number}`,
       },
     });
-
   } catch (err) {
-    console.error("verify-student DB error:", err);
-    return res.status(500).json({ success: false, message: "Server error. Please contact your coordinator." });
+    console.error("verify-student error:", err);
+    return res.status(500).json({ success: false, message: "Server error." });
   }
 });
-
 
 /* ================================================================
    ROUTE 2: POST /api/check-download
@@ -152,45 +142,28 @@ app.post("/api/verify-student", (req, res) => {
    Response (ok) : { allowed: true }
    Response (blocked): { allowed: false, message: "..." }
 ================================================================ */
-app.post("/api/check-download", (req, res) => {
+app.post("/api/check-download", async (req, res) => {
   const { roll_number } = req.body;
-
-  if (!roll_number) {
-    return res.status(400).json({ allowed: false, message: "Roll number missing." });
-  }
-
-  const rollUpper = roll_number.trim().toUpperCase();
+  if (!roll_number) return res.status(400).json({ allowed: false, message: "Roll number missing." });
 
   try {
-    const student = db.prepare(`
-      SELECT download_count
-      FROM   students
-      WHERE  UPPER(roll_number) = ?
-      LIMIT  1
-    `).get(rollUpper);
-
-    if (!student) {
+    const result = await pool.query(
+      `SELECT download_count FROM ciem WHERE UPPER(roll_number) = $1 LIMIT 1`,
+      [roll_number.trim().toUpperCase()]
+    );
+    if (result.rows.length === 0)
       return res.status(404).json({ allowed: false, message: "Roll number not found." });
-    }
 
-    const currentDownloads = student.download_count || 0;
+    const count = result.rows[0].download_count || 0;
+    if (count > 5)
+      return res.status(429).json({ allowed: false, message: `Download limit reached (${count}/5). Contact your coordinator.` });
 
-    // Change 9: Block if already downloaded more than 5 times
-    if (currentDownloads > 5) {
-      return res.status(429).json({
-        allowed : false,
-        message : `Download limit reached (${currentDownloads}/5). Please contact your class coordinator.`,
-      });
-    }
-
-    return res.json({ allowed: true, downloads_so_far: currentDownloads });
-
+    return res.json({ allowed: true, downloads_so_far: count });
   } catch (err) {
-    console.error("check-download DB error:", err);
+    console.error("check-download error:", err);
     return res.status(500).json({ allowed: false, message: "Server error." });
   }
 });
-
 
 /* ================================================================
    ROUTE 3: POST /api/record-download
@@ -211,58 +184,41 @@ app.post("/api/check-download", (req, res) => {
    Request  body : { roll_number: "CSE2026001" }
    Response (ok) : { success: true, download_count: N }
 ================================================================ */
-app.post("/api/record-download", (req, res) => {
+app.post("/api/record-download", async (req, res) => {
   const { roll_number } = req.body;
-
-  if (!roll_number) {
-    return res.status(400).json({ success: false, message: "Roll number missing." });
-  }
-
-  const rollUpper = roll_number.trim().toUpperCase();
+  if (!roll_number) return res.status(400).json({ success: false, message: "Roll number missing." });
 
   try {
-    // Change 7: Atomic increment — one SQL statement, no race condition
-    const result = db.prepare(`
-      UPDATE students
-      SET    download_count = download_count + 1
-      WHERE  UPPER(roll_number) = ?
-    `).run(rollUpper);
-
-    if (result.changes === 0) {
+    // Change 7 (atomic) + Change 8 (RETURNING — now works, this is PostgreSQL)
+    const result = await pool.query(
+      `UPDATE ciem
+       SET download_count = download_count + 1
+       WHERE UPPER(roll_number) = $1
+       RETURNING full_name, download_count`,
+      [roll_number.trim().toUpperCase()]
+    );
+    if (result.rows.length === 0)
       return res.status(404).json({ success: false, message: "Roll number not found." });
-    }
 
-    // Change 8: Instead of RETURNING (PostgreSQL-only), we do a
-    // second synchronous SELECT to get the updated count.
-    // This is safe because better-sqlite3 is synchronous and
-    // single-threaded — no other query can run between these two.
-    const updated = db.prepare(`
-      SELECT download_count
-      FROM   students
-      WHERE  UPPER(roll_number) = ?
-    `).get(rollUpper);
-
-    console.log(`📥 Download recorded — ${rollUpper} — total: ${updated.download_count}`);
-
+    const updated = result.rows[0];
+    console.log(`📥 Download recorded — ${roll_number.toUpperCase()} — total: ${updated.download_count}`);
     return res.json({ success: true, download_count: updated.download_count });
-
   } catch (err) {
-    console.error("record-download DB error:", err);
+    console.error("record-download error:", err);
     return res.status(500).json({ success: false, message: "Server error." });
   }
 });
 
 
 /* ── HEALTH CHECK ── */
-app.get("/health", (req, res) => {
+app.get("/health", async (req, res) => {
   try {
-    db.prepare("SELECT 1").get();
-    res.json({ status: "ok", db: "connected", db_path: DB_PATH });
+    await pool.query("SELECT 1");
+    res.json({ status: "ok", db: "connected", db_name: "felicitation" });
   } catch {
     res.status(500).json({ status: "error", db: "disconnected" });
   }
 });
-
 
 /* ── OPTIONAL: Serve frontend from same server ──
    Uncomment the two lines below if you want to open the site
@@ -276,7 +232,7 @@ app.listen(PORT, () => {
   console.log(`\n🎓  CIEM Felicitation Backend is running`);
   console.log(`    → http://localhost:${PORT}`);
   console.log(`    → Health: http://localhost:${PORT}/health`);
-  console.log(`    → DB    : ${DB_PATH}\n`);
+  console.log(`    → DB    : felicitation@localhost:5432\n`);
 });
 
 module.exports = app;
