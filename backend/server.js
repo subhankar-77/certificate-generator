@@ -47,7 +47,12 @@ const PORT = process.env.PORT || 3000;
   password: process.env.DB_PASSWORD || "",
   ssl:      false,
 });*/
-
+const pool = new Pool({
+  connectionString: 'postgresql://felicitation_user:lY4PN1EhGtH4XZBn60XiDvX2bWxScPx6@dpg-d80er350lvsc738ldvm0-a/felicitation',
+  ssl: process.env.NODE_ENV === 'production'
+    ? { rejectUnauthorized: false }
+    : false
+});
 pool.connect((err, client, release) => {
   if (err) {
     console.error("❌ Could not connect to PostgreSQL:", err.message);
