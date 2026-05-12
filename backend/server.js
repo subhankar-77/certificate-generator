@@ -30,9 +30,13 @@ const app  = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: "https://certificate-generator-git-main-subhankar05.vercel.app"
-}));
-
+  origin: [
+    'https://certificate-generator-iota-ashy.vercel.app',  // ✅ correct Vercel URL
+    'http://127.0.0.1:5500',                                // local dev
+    'http://localhost:5500'                                 // local dev
+  ],
+  credentials: true
+}));g
 /* ── CONNECT TO SQLITE DATABASE ──
    EDIT: Set DB_PATH in your .env file to point to your .db file.
    Example .env line:
