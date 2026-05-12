@@ -18,10 +18,10 @@
    ══════════════════════════════════════════════════════════════ */
 
 // Backend server URL. Change 3000 if you set a different PORT in .env
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://certificate-generator-d1et.onrender.com";
 
 // EDIT: The date printed on every certificate
-const CEREMONY_DATE = "5th June, 2026";
+const CEREMONY_DATE = "29th June, 2026";
 
 // EDIT: Authority names — these appear in the signature section
 const AUTHORITIES = {

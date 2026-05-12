@@ -29,6 +29,9 @@ require("dotenv").config();
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors({
+  origin: "https://certificate-generator-git-main-subhankar05.vercel.app"
+}));
 
 /* ── CONNECT TO SQLITE DATABASE ──
    EDIT: Set DB_PATH in your .env file to point to your .db file.
