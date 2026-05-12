@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: 'postgresql://felicitation_user:lY4PN1EhGtH4XZBn60XiDvX2bWxScPx6@dpg-d80er350lvsc738ldvm0-a/felicitation',
   ssl: {
     rejectUnauthorized: false  // required for Render hosted PostgreSQL
   }

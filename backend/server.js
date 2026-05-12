@@ -39,14 +39,14 @@ const PORT = process.env.PORT || 3000;
    no host/port/password — just the file path.
    The { readonly: false } flag is needed so we can UPDATE download_count.
 */
-const pool = new Pool({
+/* const pool = new Pool({
   host:     process.env.DB_HOST     || "localhost",
   port:     parseInt(process.env.DB_PORT || "5432"),
   database: process.env.DB_NAME     || "felicitation",
   user:     process.env.DB_USER     || "postgres",
   password: process.env.DB_PASSWORD || "",
   ssl:      false,
-});
+});*/
 
 pool.connect((err, client, release) => {
   if (err) {
