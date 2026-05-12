@@ -36,7 +36,7 @@ app.use(cors({
     'http://localhost:5500'                                 // local dev
   ],
   credentials: true
-}));g
+}));
 /* ── CONNECT TO SQLITE DATABASE ──
    EDIT: Set DB_PATH in your .env file to point to your .db file.
    Example .env line:
