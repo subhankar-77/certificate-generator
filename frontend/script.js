@@ -18,7 +18,7 @@
    ══════════════════════════════════════════════════════════════ */
 
 // Backend server URL. Change 3000 if you set a different PORT in .env
-const API_BASE_URL = "https://certificate-generator-green-delta.vercel.app/";
+const API_BASE_URL = "http://localhost:3000";
 
 // EDIT: The date printed on every certificate
 const CEREMONY_DATE = "5th June, 2026";
